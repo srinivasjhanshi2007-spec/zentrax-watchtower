@@ -43,7 +43,7 @@ export function makeTx(input: TxInput, merchant?: string): Tx {
     ...input, ...r, procMs,
     id: `TX-${++n}`,
     account: `DEMO-${String(Math.floor(Math.random() * 900) + 100)}`,
-    merchant: merchant ?? merchants[Math.floor(Math.random() * merchants.length)],
+    merchant: merchant ?? merchants[Math.floor(Math.random() * merchants.length)] ?? "Demo Merchant",
     time: Date.now(),
   };
 }
