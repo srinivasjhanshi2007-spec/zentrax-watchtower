@@ -1,29 +1,38 @@
-# Welcome to your Lovable project
+# ZentraX SentinelAI — Hackathon Prototype
 
-This project was built with [Lovable](https://lovable.dev).
+IBM Z Datathon 2026 · "Real-Time AI for Critical Decisions"
 
-## Build with Lovable
+A demo dashboard for real-time fraud/risk scoring using **simulated, fictional data only**.
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+## What it is
+- Browser-only simulator generates fake transactions (start/pause).
+- Manual form: amount, usual amount, unusual location (yes/no), transactions in last hour.
+- **Baseline rule-based score (0–100)** with human-readable reasons. Not a trained model, not a real fraud predictor. No accuracy or performance claims.
+- Metrics, live feed, searchable/sortable table, alert queue, detail panel.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
+## Scoring rules (`src/lib/risk.ts`)
+| Rule | Points |
+|---|---|
+| Amount ≥ 5× usual / ≥ 2× usual | +40 / +20 |
+| Unusual location | +30 |
+| ≥ 10 / ≥ 5 transactions in last hour | +30 / +15 |
+| Amount ≥ 5,000 | +10 |
 
-## Development
+Capped at 100. Low < 40, Medium 40–69, High ≥ 70.
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+Python equivalent for the team:
+```python
+def score(amount, usual, unusual_loc, recent):
+    s, r = 0, amount / usual
+    s += 40 if r >= 5 else 20 if r >= 2 else 0
+    s += 30 if unusual_loc else 0
+    s += 30 if recent >= 10 else 15 if recent >= 5 else 0
+    s += 10 if amount >= 5000 else 0
+    return min(s, 100)
 ```
 
-## Built with
+## Architecture
+Simulator/Form → `scoreTx()` → React state → dashboard views. No backend, no storage, no auth.
 
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+## IBM Z / LinuxONE plan (not implemented)
+This app is **not** deployed on IBM hardware. Planned next steps: Python scoring service on LinuxONE, train and compare a model on public synthetic data, evaluate IBM Z inference options, stream data via a queue, and measure latency on target hardware before claiming anything.
