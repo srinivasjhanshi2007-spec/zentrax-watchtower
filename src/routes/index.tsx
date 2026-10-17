@@ -130,6 +130,7 @@ function App() {
             {sel ? (
               <div className="space-y-2 text-sm">
                 <div className="flex items-center justify-between"><span className="font-mono">{sel.id}</span><Badge tier={sel.tier} /></div>
+                <div className="text-xs text-warning">Illustrative baseline rule score — not a trained model or real fraud prediction</div>
                 <div className="text-4xl font-bold">{sel.score}<span className="text-base text-muted-foreground">/100</span></div>
                 <div className="h-2 rounded bg-muted"><div className="h-2 rounded bg-primary" style={{ width: `${sel.score}%` }} /></div>
                 <dl className="grid grid-cols-2 gap-1 text-muted-foreground">
